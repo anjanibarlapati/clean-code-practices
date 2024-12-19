@@ -147,7 +147,6 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
     ```
 
     **Good example**
-
     ```TypeScript
     const TOTAL_DISCOUNT_PERCENTAGE: number = 0.02;
     const TOTAL_DISCOUNT_THRESHOLD: number = 1000;
@@ -185,7 +184,6 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
     ```
 
     **Good example**
-
     ```TypeScript
     let totalAmount = 100;
     const MAX_LIMIT = 500;
@@ -877,3 +875,56 @@ Break down your codebase into small, reusable components or modules.
 
 5. Write Tests to Detect Duplication
 Automated tests can help highlight repeated patterns and ensure changes in one place do not break functionality elsewhere.
+
+## Nested conditional statements in the code.
+
+- The code with more nested conditional statements like multiple if statements inside each other is a code smell. It becomes hard to read, understand, and maintain. This makes the logic look messy, like an arrow pointing to the right, and hides the main purpose of the code.
+- **Refactoring Technique: Early Returns**
+   - Instead of nesting conditions, handle failure conditions at the start of the function and return immediately. Then, write the main logic without unnecessary nesting. This makes the code is easier to read and understand.
+
+- **Example**
+ 
+    - Code with nested conditions 
+        ```TypeScript
+        function handleLogin(username: string | null, password: string | null, user: IUser | null): string {
+            if (username !== null && password !== null) {
+                if (user !== null) {
+                    if (user.isActive) {
+                        if (user.password === password) {
+                            return `Welcome back, ${user.name}!`;
+                        } else {
+                            return "Invalid password.";
+                        }
+                    } else {
+                        return "Account is inactive.";
+                    }
+                } else {
+                    return "User not found.";
+                }
+            } else {
+                return "Username or password cannot be null.";
+            }
+        }
+        ```
+    - Refactored code using early returns
+        ```TypeScript
+        function handleLogin(username: string | null, password: string | null, user: IUser | null): string {
+            if (!username || !password) {
+                return "Username or password cannot be null.";
+            }
+
+            if (!user) {
+                return "User not found.";
+            }
+
+            if (!user.isActive) {
+                return "Account is inactive.";
+            }
+
+            if (user.password !== password) {
+                return "Invalid password.";
+            }
+
+            return `Welcome back, ${user.name}!`;
+        }
+        ```

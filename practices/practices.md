@@ -928,3 +928,159 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
             return `Welcome back, ${user.name}!`;
         }
         ```
+
+
+## Writing Extensible Code is a good practice
+
+### What is extensible code?
+The code is extensible when someone can easily add a new feature without editing any existing code other than configuration.
+
+It simply means writing a code that is easy to extend with new features, without making the system complex, hard to maintain, or prone to errors. The goal is to create a codebase that is not only adaptable to new requirements but also simple, readable, and testable.
+
+### Example
+
+In this example, we have a Product class, and we want to calculate the discount for different types of products (e.g., Electronics, Clothing).
+
+```
+enum ProductType {
+  ELECTRONICS,
+  CLOTHING,
+}
+
+class Product {
+  constructor(
+    public name: string,
+    public type: ProductType,
+    public price: number
+  ) {}
+}
+
+class ShoppingCart {
+  private products: Product[] = [];
+
+  addProduct(product: Product) {
+    this.products.push(product);
+  }
+
+  calculateTotalCost(): number {
+    let total = 0;
+
+    for (const product of this.products) {
+      let discount = 0;
+      if (product.type === ProductType.ELECTRONICS) {
+        discount = 0.1; 
+      } else if (product.type === ProductType.CLOTHING) {
+        discount = 0.2;
+      }
+      total += product.price * (1 - discount); 
+    }
+
+    return total;
+  }
+}
+
+
+const cart = new ShoppingCart();
+cart.addProduct(new Product('Laptop', ProductType.ELECTRONICS,1000));
+cart.addProduct(new Product('Shirt', ProductType.CLOTHING, 50));
+
+```
+
+### Problems with this code
+
+- The logic for calculating the discount is hardcoded in the ShoppingCart class based on the product type. If we need to add new product types, we must modify the ShoppingCart class.
+- Adding a new product type (like FOOD) requires modifying the ShoppingCart class.
+- If the discount calculation rules change (e.g., changing the discount for ELECTRONICS), we must modify the ShoppingCart class.
+- If a new feature add, the code base increases which automatically increase the complexity of our code.
+- It Reduces the readability.
+- Increases the code duplication.
+
+### Extensible code for this Example
+
+```
+enum ProductType {
+  ELECTRONICS,
+  CLOTHING,
+  FOOD, 
+}
+
+class Product {
+  constructor(
+    public name: string,
+    public type: ProductType,
+    public price: number
+  ) {}
+}
+
+interface DiscountStrategy {
+  calculateDiscount(price: number): number;
+}
+
+class ElectronicsDiscountStrategy implements DiscountStrategy {
+  const tenPercentDiscount:number=0.1;
+  calculateDiscount(price: number): number {
+    return price * tenPercentDiscount; 
+  }
+}
+
+class ClothingDiscountStrategy implements DiscountStrategy {
+  const twentyPercentDiscount:number=0.2;
+  calculateDiscount(price: number): number {
+    return price * twentyPercentDiscount; 
+  }
+}
+
+class FoodDiscountStrategy implements DiscountStrategy {
+  const fivePercentDiscount:number=0.1;
+  calculateDiscount(price: number): number {
+    return price * fivePercentDiscount;
+  }
+}
+
+class DiscountStrategyFactory {
+  static getStrategy(productType: ProductType): DiscountStrategy {
+    switch (productType) {
+      case ProductType.ELECTRONICS:
+        return new ElectronicsDiscountStrategy();
+      case ProductType.CLOTHING:
+        return new ClothingDiscountStrategy();
+      case ProductType.FOOD:
+        return new FoodDiscountStrategy();
+      default:
+        throw new Error('Unknown product type');
+    }
+  }
+}
+
+class ShoppingCart {
+  private products: Product[] = [];
+
+  addProduct(product: Product) {
+    this.products.push(product);
+  }
+
+  calculateTotalCost(): number {
+    let total = 0;
+
+    for (const product of this.products) {
+      const discountStrategy = DiscountStrategyFactory.getStrategy(product.type);
+      total += product.price - discountStrategy.calculateDiscount(product.price); 
+    }
+
+    return total;
+  }
+}
+
+const cart = new ShoppingCart();
+cart.addProduct(new Product('Laptop', ProductType.ELECTRONICS, 1000));
+cart.addProduct(new Product('Shirt', ProductType.CLOTHING, 50));
+cart.addProduct(new Product('Apple', ProductType.FOOD, 2)); 
+
+```
+
+### Benefits of Extensible code
+
+- The discount calculation logic is moved to individual strategy classes (ElectronicsDiscountStrategy, ClothingDiscountStrategy, etc.). This makes the ShoppingCart class cleaner and more focused on the main logic (managing products).
+- We can add new product types and discount strategies without modifying the existing ShoppingCart class. We simply create a new discount strategy class and update the DiscountStrategyFactory.
+- If we need to add a new product type (like FOOD), we just create a new strategy and update the factory without touching the ShoppingCart class.
+- If the discount rules change for a particular product type, we only need to modify the respective strategy class, not the core logic of the shopping cart.

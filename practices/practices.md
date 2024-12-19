@@ -1362,3 +1362,45 @@ library.borrowBook(123);
 library.reserveBook(456);
 library.payLateFees(20);
 ```
+## Explaining Variables and Explaining Functions in Clean Code
+   In clean code, explaining variable and function names mean choosing names that clearly tell you what the variable or function represents, without needing extra explanation or comments. The goal is to make our code so clear that someone reading it can understand what it's doing just by looking at the names.
+
+This will provide the following:
+- **Clarity**: Clear variable names help anyone reading your code (including you) understand what the variable is for.
+- **Less Confusion**: You don’t have toconfusewhat a variable means.
+
+- **Easier to Maintain**: Clear names make it easy to go back and modify the code later, because you already know what the variables do.
+
+   Here’s an example where the variable names
+
+   **Unclear function & variable names**
+
+    ```TypeScript
+   function sqr(x: number): number {
+          return x * x;
+   }      
+    let n=5;
+    console.log(sqr(n));
+    ```
+  From the above example, the problems are:
+  - Non-descriptive function name:
+The function name sqr is an abbreviation, and while it's short, it's not immediately clear to someone unfamiliar with the code what it does. square would be a better name.
+  - Non-descriptive variable name:
+The variable n could be more descriptive, such as number or inputNumber.
+
+   **Clear function & variable names**
+
+    ```TypeScript
+    function calculateSquare(number: number): number {
+          return number * number;
+    }      
+    let inputNumber=5;
+    console.log(calculateSquare(inputNumber));
+    ```
+   From the above example, when we observe this and it makes us to understand the below points. 
+   - Descriptive function name: The function name calculateSquare clearly describes what the function does, it calculates the square of a number.
+   - Descriptive variable name: The variable inputNumber clearly indicates that it holds a number input to the function.
+   - The function and variable names are longer but far more readable and self-explanatory, which improves maintainability.
+
+  
+ The good example follows clean code principles by favoring clarity and descriptiveness over shortness. Even for simple tasks, naming things well goes a long way in making code understandable to others (and to our future self).

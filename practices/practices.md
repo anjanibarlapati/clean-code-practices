@@ -1456,3 +1456,52 @@ import { rectangleArea } from "./rectangle";
        return length * width;
     }
 ```
+
+
+## Fixtures: 
+* Fixtures are predefined sets of data used to test code.
+* Fixtures are not just test data, they are structured, reusable, and pre-prepared datasets 
+* They are crucial for maintaining consistency and accuracy in testing environments, whether it's unit tests, integration tests, or end-to-end tests.
+* Predefined dataset, making it easy to compare test results each time tests are run.
+* Using fixtures saves time since test data doesn't need to be recreated for each test case.
+* Same fixture file can be used across multiple tests.
+
+Example: Fixture File 
+```Typescript
+const userFixture = {
+    validUser: {
+        name: "Anjali",
+        email: "Anjali@415.com",
+        password: "415118",
+    },
+    invalidUser: {
+        name: "",
+        email: "invalid-email",
+        password: "123",
+    },
+};
+
+module.exports = userFixture;
+ ```
+
+Test File:
+
+```Typescript
+const { validUser, invalidUser } = require("../src/user.fixture");
+
+describe("User Registration", () => {
+    it("should register a new user successfully", async () => {
+        const response = await registerUser(validUser);
+        expect(response.status).toBe(201);
+    });
+
+    it("should fail to register an invalid user", async () => {
+        const response = await registerUser(invalidUser);
+        expect(response.status).toBe(400);
+    });
+})
+```
+
+* Keeps test files focused on testing logic rather than repetitive data setup.
+* Instead of duplicating test data across multiple tests, fixtures centralize it in one place.
+* By reusing a fixture, you reduce the risk of typos or mismatched data across tests.

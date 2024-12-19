@@ -179,3 +179,36 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
     const MAX_LIMIT = 500;    
     let finalAmount = totalAmount + MAX_LIMIT;
     ```
+## GOD Line
+
+- **God Line** refers to a single, very long and complex line of code that tries to do too much at once. These lines are difficult to read, understand, and debug because they combine multiple operations, making the logic unclear.
+- **Refactoring Technique: Split into Smaller Steps**
+  - Break the complex line into smaller, meaningful steps. Assign intermediate results to proper named variables. This improves readability and makes debugging easier since each step to its job independently.
+
+- **Example**
+    - Code with GOD line
+        ```TypeScript
+        let amount = quantity * price - Math.max(0, quantity - 10) * price * 0.2 + Math.min(40, quantity * price * 0.1);
+        ```
+    - Refactored code
+        ```TypeScript
+        function discountFor(quantity:number, price: number):number {
+            const MAX_QUANTITY_FOR_DISCOUNT = 10;
+            const DISCOUNT_RATE = 0.1;
+            if(quantity < MAX_QUANTITY_FOR_DISCOUNT) {
+                return 0;
+            }
+
+            return (quantity - MAX_QUANTITY_FOR_DISCOUNT) * price * DISCOUNT_RATE ;
+        }
+
+        function shippingAmountFor(quantity:number, price: number):number {
+            const SHIPPING_RATE = 0.1;
+            return Math.min(40, quantity * price * SHIPPING_RATE);
+        }
+
+        const discount: number = discountFor(quantity, price);
+        const basePrice: number = quantity * price;
+        const shippingAmount: number = shippingAmountFor(quantity, price);
+        let amount = basePrice - discount + shippingAmount;
+        ```

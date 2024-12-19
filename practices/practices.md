@@ -245,3 +245,122 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
         return result
     }
     ```
+## Code smell in functions
+## 1. Incorrect function name: 
+The code smell: 
+- 
+ Wrong function name does not conveys the original action of the function. It will create misconception to the one who is looking at it. 
+Refactoring Technic: 
+- Initially check the function name, the name of the function is conveying what job or action it is doing. The name of the function should related to the action the function is doing. 
+- The function should be in the present tense not in the past tense. 
+[For more information refer this ](#1-incorrect-function-name) 
+
+## 2. Long function signature ( More than 2 parameters in the function signature)
+
+The code smell: 
+- 
+  If function signature is too long it takes messy and every time we need to check the parameters. The function signature is too long i.e is it taking more than 2 parameters, then it is the code smell. 
+
+Refactoring Technic: 
+- 
+ If you want to give more than two parameters to a function then use a class and create instance for that class and give that instance to the function. This makes more sense, because the function taking properties and acting upon the properties, so they may belong to the one class. 
+
+ **Bad example**
+```Typescript
+   function costFor(productName:string,productQuantity:number,productPrice:number){
+     return productQuantity*productPrice;
+   }
+```
+**Good example**
+```Typescript 
+  function costFor(product:Product){
+    return product.quantity*product*price;
+  }
+```
+## 3. Long function. 
+The code smell:
+- 
+A function should do only one task. And long function is a code smell.
+
+Refactoring Technic:
+ - 
+- If your function doing more than one task then divide the function into multiple function. And make sure that the resultant function is doing only one task. 
+- After diving call those functions inside this function. That will solve this problem and your code also looks clean. This will increases the readability. 
+- It also helps you to use the extracted logic to use anywhere it is required, because you moved that into another function. 
+
+
+# Code smell in classes
+1.The code smell:
+ - 
+   - Having more unrelated methods in the class is a code smell. 
+   - classes having only getter and setter methods is also code smell. 
+   - Multiple functions acting on the same properties.
+   - Static method in the class is a code smell.
+
+ Refactoring Technic :
+ - 
+ -  The functionality of the class can be defined in the one line. The class should work on the single entity. And it should contain the behavior i.e methods which do some action on the properties.
+ - If the class contain unrelated methods, then extract them create another class and move these to that class. And make sure classes should have the behavior not only get and setter methods. If no methods are present in that class, then use type or interface.  
+ - Create class and move the properties and functions into that class.  
+ - Don't use any static methods in the class, that is a bad practice. If you want a method without creating a object means that method doesn't belongs to that class or that is not operating on the class fields. So move that function out of the class. If that belong to any other class, then move to that class or else keep it that as a separate function.   
+- All the private and public methods should be at one place.
+
+ **Bad example** 
+  ```Typescript
+     class Product{
+        name:string,
+        price:number,
+        quantity:number,
+        discount:float;
+        constructor(name:string,price:number,quantity:number,discount:float){
+            this.name=name;
+            this.price=price;
+            this.quantity=quantity;
+            this.discount=discount;
+        }
+        public calculateCostAndDisplayBill(){
+        const cost=this.quantity*this.price;
+        const totalCost=cost-cost*this.discount;
+        const saved=cost-totalCost;
+        console.log('The total cost for the'+this.name+'is'+totalCost);
+        console.log('You saved'+saved+'on this product');
+        }
+    }
+  ```
+ **Good example** 
+ ```TypeScript
+    class Order{
+        name:string,
+        totalCost:number,
+        savedAmount:number,
+        constructor(name:string,totalCost:number,savedAmount:number){
+            this.name=name;
+            this.totalCoat=totalCost;
+            this.savedAmount=savedAmount;
+        }
+        public display(){
+         console.log('Total cost of the'+this.name+'is'+this.totalCost);
+         console.log('You saved'+this.saved);
+    }
+    }
+    class Product{
+        name:string,
+        price:number,
+        quantity:number,
+        discount:float;
+        constructor(name:string,price:number,quantity:number,discount:float){
+            this.name=name;
+            this.price=price;
+            this.quantity=quantity;
+            this.discount=discount;
+        }
+        public calculateCost(){
+        const cost=this.quantity*this.price;
+        const totalCost=cost-cost*this.discount;
+        const saved=cost-totalCost;
+        const order=new Order(product.name,totalCost,saved);
+        order.display(order);
+        }
+    }
+ 
+ ```

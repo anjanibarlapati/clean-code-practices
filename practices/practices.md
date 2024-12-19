@@ -1404,3 +1404,55 @@ The variable n could be more descriptive, such as number or inputNumber.
 
   
  The good example follows clean code principles by favoring clarity and descriptiveness over shortness. Even for simple tasks, naming things well goes a long way in making code understandable to others (and to our future self).
+
+
+## Chatracterization Testing
+A Characterization Testing is a type of automated test that is written to document the behavior of existing code. The primary goal of a characterization test is not to change the behavior of the code.
+
+1. ### Why Are Characterization Tests Important
+    * Sometimes, code is hard to understand. Characterization tests help show how the code works, even if it’s not fully clear.
+
+    * Characterization tests help capture what the code currently does. Before making changes, we write these tests. If the tests pass after code changes, it means we are doing it correctly. They basically ensure the code still works as expected.
+    
+    * When changes are made to the code, these tests help find any new errors.
+
+ **Problem statement:**
+ ```
+  Simple example of a function that calculates the area of a rectangle.
+```
+
+**Initial Code**
+ ```TypeScript
+    export function rectangleArea(length: number, width: number): number {
+        return length * width;
+    }
+```
+
+* Write a Test Case for the Current Behavior
+```TypeScript
+import { rectangleArea } from "./rectangle";
+   test("should calculate the area of a rectangle correctly", () => 
+   {
+      const area = rectangleArea(5, 10);
+      expect(area).toBe(50);
+   });
+
+   test("should throw an error if length or width is non-positive", () =>
+    {
+       expect(() => rectangleArea(-5, 10)).toThrow("Length and width must be positive numbers.");
+       expect(() => rectangleArea(5, 0)).toThrow("Length and width must be positive numbers.");
+    });
+```
+
+* Refactor the Code
+
+```TypeScript
+    export function rectangleArea(length: number, width: number): number 
+    {
+        if (length <= 0 || width <= 0) 
+        {
+           throw new Error("Length and width must be positive numbers.");
+        }
+       return length * width;
+    }
+```

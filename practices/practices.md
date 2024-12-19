@@ -290,77 +290,60 @@ Refactoring Technic:
 - It also helps you to use the extracted logic to use anywhere it is required, because you moved that into another function. 
 
 
-# Code smell in classes
+# Organizing the private and public methods in the class. 
 1.The code smell:
  - 
-   - Having more unrelated methods in the class is a code smell. 
-   - classes having only getter and setter methods is also code smell. 
-   - Multiple functions acting on the same properties.
-   - Static method in the class is a code smell.
+   - If the private and public methods are mixed so we need to search for the method. And it looks messy. 
 
  Refactoring Technic :
  - 
- -  The functionality of the class can be defined in the one line. The class should work on the single entity. And it should contain the behavior i.e methods which do some action on the properties.
- - If the class contain unrelated methods, then extract them create another class and move these to that class. And make sure classes should have the behavior not only get and setter methods. If no methods are present in that class, then use type or interface.  
- - Create class and move the properties and functions into that class.  
- - Don't use any static methods in the class, that is a bad practice. If you want a method without creating a object means that method doesn't belongs to that class or that is not operating on the class fields. So move that function out of the class. If that belong to any other class, then move to that class or else keep it that as a separate function.   
-- All the private and public methods should be at one place.
+ - Keep all the private methods at one place and all public methods at one place. So the class looks clean. And we can also easily find a method in the class. If the function we are searching is the private then we can directly search in the private methods. And if the method we are searching is the public then we can search directly in the public methods. 
 
- **Bad example** 
+ **code smell** 
   ```Typescript
      class Product{
         name:string,
         price:number,
+        private barcode:string;
         quantity:number,
-        discount:float;
-        constructor(name:string,price:number,quantity:number,discount:float){
+        constructor(name:string,price:number,quantity:number,barcode:string){
             this.name=name;
             this.price=price;
             this.quantity=quantity;
-            this.discount=discount;
+            this.barcode=barcode;
         }
-        public calculateCostAndDisplayBill(){
-        const cost=this.quantity*this.price;
-        const totalCost=cost-cost*this.discount;
-        const saved=cost-totalCost;
-        console.log('The total cost for the'+this.name+'is'+totalCost);
-        console.log('You saved'+saved+'on this product');
+        public calculateCost(){
+        // some logic
+        }
+        private displayBarcode(){
+            console.log(this.barcode);
+        }
+        public DisplayBill(){
+            //some logic
         }
     }
   ```
- **Good example** 
+ **Refactored code** 
  ```TypeScript
-    class Order{
-        name:string,
-        totalCost:number,
-        savedAmount:number,
-        constructor(name:string,totalCost:number,savedAmount:number){
-            this.name=name;
-            this.totalCoat=totalCost;
-            this.savedAmount=savedAmount;
-        }
-        public display(){
-         console.log('Total cost of the'+this.name+'is'+this.totalCost);
-         console.log('You saved'+this.saved);
-    }
-    }
     class Product{
         name:string,
         price:number,
         quantity:number,
-        discount:float;
-        constructor(name:string,price:number,quantity:number,discount:float){
+        private barcode:string;
+        constructor(name:string,price:number,quantity:number,barcode:string){
             this.name=name;
             this.price=price;
             this.quantity=quantity;
-            this.discount=discount;
+            this.barcode=barcode;
+        }
+        private displayBarcode(){
+            console.log(this.barcode);
         }
         public calculateCost(){
-        const cost=this.quantity*this.price;
-        const totalCost=cost-cost*this.discount;
-        const saved=cost-totalCost;
-        const order=new Order(product.name,totalCost,saved);
-        order.display(order);
+        // some logic
+        }
+          public DisplayBill(){
+            //some logic
         }
     }
  

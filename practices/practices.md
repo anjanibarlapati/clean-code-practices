@@ -251,7 +251,8 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
 The code smell: 
 - 
  Wrong function name does not conveys the original action of the function. It will create misconception to the one who is looking at it. 
-Refactoring Technic: 
+Refactoring Techniques: 
+-  
 - Initially check the function name, the name of the function is conveying what job or action it is doing. The name of the function should related to the action the function is doing. 
 - The function should be in the present tense not in the past tense. 
 [For more information refer this ](#1-incorrect-function-name) 
@@ -262,7 +263,7 @@ The code smell:
 - 
   If function signature is too long it takes messy and every time we need to check the parameters. The function signature is too long i.e is it taking more than 2 parameters, then it is the code smell. 
 
-Refactoring Technic: 
+Refactoring Techniques: 
 - 
  If you want to give more than two parameters to a function then use a class and create instance for that class and give that instance to the function. This makes more sense, because the function taking properties and acting upon the properties, so they may belong to the one class. 
 
@@ -283,7 +284,7 @@ The code smell:
 - 
 A function should do only one task. And long function is a code smell.
 
-Refactoring Technic:
+Refactoring Techniques:
  - 
 - If your function doing more than one task then divide the function into multiple function. And make sure that the resultant function is doing only one task. 
 - After diving call those functions inside this function. That will solve this problem and your code also looks clean. This will increases the readability. 
@@ -295,7 +296,7 @@ Refactoring Technic:
  - 
    - If the private and public methods are mixed so we need to search for the method. And it looks messy. 
 
- Refactoring Technic :
+ Refactoring Techniques :
  - 
  - Keep all the private methods at one place and all public methods at one place. So the class looks clean. And we can also easily find a method in the class. If the function we are searching is the private then we can directly search in the private methods. And if the method we are searching is the public then we can search directly in the public methods. 
 

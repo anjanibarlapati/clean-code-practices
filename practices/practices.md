@@ -30,7 +30,7 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
 
     Use descriptive, meaningful names that convey the purpose of the function or variable.
 
-    **Bad example**
+    **Bad example:**
 
     ```TypeScript
     function cost(x: number): number {
@@ -38,7 +38,7 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
     }
     ```
 
-    **Good example**
+    **Good example:**
 
     ```TypeScript
     function calculateTotalPrice(price: number): number {
@@ -60,7 +60,7 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
 
     Replace magic numbers with named constants that explain what the number represents.
 
-    **Bad example**
+    **Bad example:**
 
     ```TypeScript
     function calculateArea(radius: number): number {
@@ -68,7 +68,7 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
     }
     ```
 
-    **Good example**
+    **Good example:**
 
     ```TypeScript
     const PI = 3.14159;
@@ -433,4 +433,107 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
         }
         }
 
+    ```
+
+## Feature - Envy
+**Feature envy** is a code smell which occurs when a class or methods need to access and manipulate the data from another class to complete its own task.
+This method accesses properties or behaviour of other class excessively which indicates that it might belongs to the class.
+
+In simple way, feature envy code smell occurs when a funciton frequently interacts with data or functions in other modules.
+
+- ## Issues :
+    - It violates the principle of encapsulation.
+    - It also increases **coupling** between the classes.
+    - It doesn't follow **`tell-don't-ask`** principle.
+
+- ## Ways to handle feature-envy :
+    - **`Extract`** the method that uses the data or functionality from another class and move it to that class.
+    - Introducing a new **`class`** tht encapsulates the data and functionality that are used by another class.
+
+- ## `Tell don't ask` 
+    - Tell don't ask is a principle which helps people to remember that Object-Orientation is about bundling data with the functions that operate on that data.
+    - In simple words, it means we should tell an object what to do instead of asking for its data and acting on that data.
+    - It focuses on making objects more resposible for their own data and behaviour.
+
+    ### Let's understand more with an example :
+    ---
+    ```typescript
+    class Orders {
+        products: Product[]
+
+        constructor(products: Product[]) {
+            this.products = products
+        }
+
+        public totalCost() {
+            return this.products.reduce((totalCost, product) => {
+                totalCost + product.getPrice() * product.getQuantity() 
+            }, 0);
+        }
+    }
+
+    class Product {
+        private _name: string,
+        private _price: number,
+        private _quantity: number
+
+        constructor(product: ProductAttributes) {
+            this._name = product.name
+            this._price = product.price
+            this._quantity = product.quantity
+        }
+
+        public getPrice() {
+            return this._price;
+        }
+
+        public getQuantity() {
+            return this._quantity;
+        }
+    }
+    ```
+
+    In the above **code snippet**, the `totalCost` method in Orders class is purely dependent on the `Product` class for its internal data (**price** and **quantity**) to calculate the total cost.
+
+    - Here it creates a tight coupling (dependency) between **`Product`** and **`Orders`** class.
+    
+    - The behaviour of calculating the cost of product might logically belong to the Product class since it involves its own data.
+
+    ### Now, Let's refactor this code snippet !
+    
+    - Move the logic for calculating the cost of a product to the Product class.
+
+    #### Refactored code snippet :
+    ---
+
+    ```typescript
+    class Product {
+        private _name: string,
+        private _price: number,
+        private _quantity: number
+
+        constructor(product: ProductAttributes) {
+            this._name = product.name
+            this._price = product.price
+            this._quantity = product.quantity
+        }
+
+        public cost() {
+            return this._price * this._quantity;
+        }
+    }
+
+    class Orders {
+        products: Product[]
+
+        constructor(products: Product[]) {
+            this.products = products
+        }
+
+        public totalCost() {
+            return this.products.reduce((totalCost, product) => {
+                totalCost + product.cost();
+            }, 0);
+        }
+    }
     ```

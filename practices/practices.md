@@ -537,3 +537,231 @@ In simple way, feature envy code smell occurs when a funciton frequently interac
         }
     }
     ```
+
+
+# Boy Scout Rule:
+
+- The "**Boy Scout Rule**" is a principle in software development that encourages us to leave the codebase in a cleaner state than we have found it. 
+- The idea is inspired by the scouting motto: "**Leave the  campground cleaner than you found it.**" 
+
+    - In the context of coding, this means that every time we touch or work on a piece of code, we should aim to improve it, even if it’s in small ways. 
+
+
+- ## Code Smells Related to Boy Scout Rule :
+
+    1. **Duplicated Code:** 
+    - Repeating the same code in multiple places instead of abstracting it into a function or class can lead to redundancy and maintenance headaches. When we see code repetition, it’s a good sign we should refactor it.
+
+    Example:
+    -  Duplicated code for calculating the tax in multiple places:
+    ```sh
+    function calculateTotalPrice(price: number): number {
+    const tax = price * 0.05;
+    return price + tax;
+    }
+
+    function calculateDiscountedPrice(price: number, discount: number): number {
+    const tax = price * 0.05;
+    return price - discount + tax;
+    }
+
+    ```
+
+    - Instead of duplicating the tax calculation logic, we can refactor it into a helper function.
+
+    **Refactored code:**
+
+    ```sh
+    
+    // Helper function to calculate tax
+
+    function calculateTax(price: number, taxRate: number = 0.05): number {
+    return price * taxRate;
+    }
+
+    function calculateTotalPrice(price: number): number {
+    const tax = calculateTax(price);
+    return price + tax;
+    }
+
+    function calculateDiscountedPrice(price: number, discount: number): number {
+    const tax = calculateTax(price);
+    return price - discount + tax;
+    }
+
+    ```
+   2. **Long Methods:** Large, complex methods can be hard to read, test, and maintain. 
+        If a function or method does too many things, it might be time to break it down into smaller, more focused methods.
+
+    Example:
+    ```sh
+    function processOrder(order: Order): void {
+    // Validate the order
+    if (!order.isValid()) {
+        throw new Error("Invalid order");
+    }
+
+    // Check inventory
+    if (!checkInventory(order)) {
+        throw new Error("Insufficient stock");
+    }
+
+    // Charge the customer
+    chargeCustomer(order);
+
+    // Ship the order
+    shipOrder(order);
+
+    // Send confirmation
+    sendConfirmation(order);
+    }
+    ```
+  - **Problem (Code Smell):** The ```process_order()``` method is doing too many things — `validating`, `checking inventory`, `charging`, `shipping`, etc.
+
+   - **Solution (Boy Scout Rule):** Breaking the responsibilities into smaller, focused methods. This makes the code easier to test, understand, and modify.
+   
+   **Refactored code:**
+   ```sh
+   function processOrder(order: Order): void {
+    validateOrder(order);
+    checkInventory(order);
+    chargeCustomer(order);
+    shipOrder(order);
+    sendConfirmation(order);
+    }
+
+    function validateOrder(order: Order): void {
+    if (!order.isValid()) {
+        throw new Error("Invalid order");
+    }
+    }
+
+    function checkInventory(order: Order): void {
+    if (!checkInventory(order)) {
+        throw new Error("Insufficient stock");
+    }
+    }
+    ```
+    3. **Long Parameter Lists:**
+    -  A function or method that takes too many parameters is usually a sign that something is wrong. It can indicate that the function is doing too much or that there’s a missing abstraction.
+
+    Example: 
+
+    ```sh
+    function createUser(username: string, email: string, password: string, phone: string, address: string, city: string, country: string): void { ... }
+    ```
+
+    - **Problem (Code Smell):** The method ``createUser`` takes a long list of parameters, which can be error-prone and difficult to maintain.
+
+    - **Solution (Boy Scout Rule):** Can be refactored by encapsulating the parameters in a User class, reducing the number of parameters and improving clarity.
+
+    **Refactored code:**
+    ```sh
+    class User {
+    constructor(
+        public username: string,
+        public email: string,
+        public password: string,
+        public phone: string,
+        public address: string,
+        public city: string,
+        public country: string
+    ) {}
+    }
+
+    function createUser(user: User): void {
+    // we can use the user object to access the properties
+    }
+    ```
+
+    4. **Hard-Coded Values:**
+    
+    -  Hard-coding values (such as strings, numbers, file paths, etc.) in our code is a bad practice because it makes the code harder to maintain and less flexible.
+
+    Example:
+    ```sh
+    function connectToDatabase(): void {
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "admin",
+        password: "admin123",
+        database: "app_db"
+    });
+    connection.connect();
+    }
+    ```
+
+    - **Problem (Code Smell):** Hard-coded values like `localhost`, `admin123`, and `app_db` make the code less flexible and harder to maintain.
+
+    - **Solution (Boy Scout Rule):** Using environment variables (via dotenv) to store sensitive or configurable data like database connection details, makes the code more flexible and environment-agnostic.
+
+    **Refactored code:**
+
+    ```sh
+    import * as dotenv from 'dotenv';
+
+    dotenv.config();
+
+    function connectToDatabase(): void {
+    const connection = mysql.createConnection({
+        host: process.env.DB_HOST || 'localhost',
+        user: process.env.DB_USER || 'admin',
+        password: process.env.DB_PASSWORD || '',
+        database: process.env.DB_DATABASE || 'app_db'
+    });
+    connection.connect();
+    }
+    ```
+
+
+    5. **Too Much Commenting:** 
+    
+    - If code is heavily commented, it might be a sign that the code is unclear or difficult to understand. Instead of writing extensive comments, it’s often better to improve the code itself, making it more self-explanatory.
+
+    Example:
+    ```sh
+    // This function calculates the total price with tax added
+    function calculateTotal(price: number): number {
+
+    // First, calculate the tax
+
+    const tax = price * 0.05;
+
+    // Now, add tax to the original price
+
+    const total = price + tax;
+
+    // Return the final total price
+
+    return total;
+    }
+    ```
+
+    - **Problem (Code Smell):** Excessive comments clutter the code, and the code itself isn't clear.
+    - **Solution (Boy Scout Rule):** Simplify the code and remove unnecessary comments. Using clear variable and function names so the code is self-explanatory.
+
+
+    **Refactored code:**
+
+    ```sh
+    function calculateTotal(price: number): number {
+    const tax = price * 0.05;
+    return price + tax;
+    }
+    ```
+
+
+    
+
+
+
+
+       
+    
+
+
+
+
+
+
+

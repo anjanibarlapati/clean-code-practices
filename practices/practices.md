@@ -755,18 +755,50 @@ In simple way, feature envy code smell occurs when a funciton frequently interac
 
     ```
 
+## Compile Time Safety.
 
+- Compile-time safety means that the compiler can analyze our code and guarantee that certain kinds of errors are not present in our code.
+  - For example, consider the below function:
+    ```
+    const max = (numberOne:number,numberTwo:number) : number => {
+        if(numberOne>=numberTwo){
+            return numberOne;
+        }
+        return numberTwo;
+    }
+    ```
+  - Now the above function takes two numbers as parameters and gives a number as output.
+  - But, while calling the function i.e., while using the above function, if we pass other than numbers to the function, an error pops up in the below manner:
+    ```
+    max(2,"u");
+    ```
+     Error: `Argument of type 'string' is not assignable to parameter of type 'number'`.
+
+- But Sometimes, a logic which may validate few aspects in run time may be converted to get checked in compile time. This can be done using `generics` in Type Script.
+-Consider the below class example:
+
+    ```
+        class Container<T>{
+            value:T;
+            constructor(value:T){
+                this.value = value;
+            }
+            set(value:T){
+                this.value=value
+            }
+        }
+    ```
+
+    - If we look into the usage:
+        ```
+            const stringContainer = new Container<string>("Good");
+            stringContainer.set("Good Morning") //No compile time error as string is passed.
+            stringContainer.set(1) 
+        ```
+
+        Error: `Argument of type 'number' is not assignable to parameter of type 'string' `.
     
-
-
-
-
-       
-    
-
-
-
-
-
-
+- This is how compile time safety works in TypeScript. 
+- It checked whether the string type is being passed or not. 
+- If not passed properly, throwing a compile time error makes us check for the mistake.
 

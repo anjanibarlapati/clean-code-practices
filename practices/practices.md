@@ -801,3 +801,79 @@ In simple way, feature envy code smell occurs when a funciton frequently interac
 - It checked whether the string type is being passed or not. 
 - If not passed properly, throwing a compile time error makes us check for the mistake.
 
+## Internal duplication:
+
+- Internal duplication refers to the repetition of logic, code, or data with in single code base. 
+- This type of duplication can make your codebase harder to maintain, increase the likelihood of introducing bugs, and reduce overall readability. 
+- Addressing internal duplication is a crucial step toward writing clean and maintainable code.
+
+
+1. Logic Duplication
+
+When the same logic is duplicating multiple time which is not visible to us. Where duplication occurs internally
+```Typescript
+Example:
+for(let i = 0 ; i<5;i++){
+    console.log("Hello all!")
+}
+```
+In the above example, we have created the loop which console a string, but internally same logics duplicating. In above logics is same as like this.
+```Typescript
+console.log("Hello all!")
+console.log("Hello all!")
+console.log("Hello all!")
+console.log("Hello all!")
+console.log("Hello all!")
+
+```
+So, to avoid such duplication we need to wrap that logic in some function and then we need to call that function.
+
+```Typescript
+const printingHello(){
+    console.log("Hello all!")
+}
+
+for(let i = 0 ; i<5;i++){
+    printingHello()
+}
+```
+
+### Why Avoid Internal Duplication?
+
+1. Improves Maintainability
+Fixing a bug or updating logic in one place automatically reflects across the entire codebase.
+
+
+2. Enhances Readability
+Centralized logic or data is easier to understand than scattered, repetitive pieces.
+
+
+3. Prevents Bugs
+Reducing duplication ensures consistency and avoids errors caused by outdated or mismatched changes.
+
+
+4. Promotes DRY Principle
+Following the "Don't Repeat Yourself" principle leads to cleaner, modular, and reusable code.
+
+
+
+### Strategies to Eliminate Internal Duplication
+
+1. Refactor Repeated Logic
+Identify repeated patterns and extract them into helper functions, methods, or utilities.
+
+
+2. Use Constants and Configuration Files
+Centralize hardcoded values and repeated data into a dedicated file or module.
+
+
+3. Leverage Design Patterns
+Apply patterns like Singleton, Factory, or Strategy to handle repetitive instantiations or logic.
+
+
+4. Adopt Modular Programming
+Break down your codebase into small, reusable components or modules.
+
+
+5. Write Tests to Detect Duplication
+Automated tests can help highlight repeated patterns and ensure changes in one place do not break functionality elsewhere.

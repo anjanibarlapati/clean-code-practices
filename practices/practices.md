@@ -1,3 +1,12 @@
+# Clean Code - Building a MindSet
+
+- "Clean Code is not a checklist, it's a mindset." – **Naveen Gaddi**
+- Clean code isn't just about following principles; it's about building a mindset that naturally leads us to write cleaner, more maintainable code.
+
+- We should always wrirt the code in the clients perspective and that should convey its intention to others.
+- "Any fool can write code that a computer can understand. Good programmers write code that humans can understand." – *Martin Fowler*
+- Always make code human readability. Machines execute code, but humans maintain it.
+
 # Clean Code Practices:
 
 Writing clean code is crucial because it makes our codebase easier to understand, maintain, and debug. If our code is unclear, it can lead to confusion and more bugs down the road. One way to identify problems in our code is through code smells—these are signs that something might be wrong, even if the code runs correctly.

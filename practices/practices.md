@@ -188,3 +188,26 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
     const MAX_LIMIT = 500;    
     let finalAmount = totalAmount + MAX_LIMIT;
     ```
+
+## Code Formatting
+
+- If we use inconsistent formatting throughout a codebase, then the code is not readable and easier to understand.
+- Formatting the code is an important aspect of writing clean code. It make the code more readable and easier to understand.
+
+- When code is formatted properly, then developers can easily identify patterns and understand how the code works, which makes it easier to debug, maintain, and update the codebase over time. 
+
+- **Example**
+  - Code with out formatting
+    ```TypeScript
+    const add=(number1,number2)=>{
+    const result=number1+number2;
+    return result;
+    }
+    ```
+  - Code after formatting
+    ```TypeScript
+    const add = (number1, number2) => {
+        const result = number1 + number2
+        return result
+    }
+    ```

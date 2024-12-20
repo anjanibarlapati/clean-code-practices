@@ -1263,65 +1263,67 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
   2.  Predictability: The same input always produces the same output, so there are no surprises.
 
   3.  Composability: Pure functions can be composed together to build more complex behaviors without side effects.
-### Shot gun surgery
+
+## Shot gun surgery
+
 The shotgun surgery code smell is one of the code smells that often overlaps with other code smells, particularly duplicate code. Shotgun Surgery resembles Divergent Change. Divergent Change is when many changes are made to a single class. Shotgun Surgery refers to when a single change is made to multiple classes simultaneously.
 
-In fact, the shotgun surgery code smell is at the root of that issue of “you change something here and it breaks something over there”. 
+In fact, the shotgun surgery code smell is at the root of that issue of “you change something here and it breaks something over there”.
 
- **Why it should be avoided?**    
+**Why it should be avoided?**
+
 - Changes in logic require updates in multiple locations, increasing the time and effort needed for updates.
 - The logic is duplicated instead of being encapsulated in one place.
 
- **Example**
- 
-  
+  **Example**
 
- ```TypeScript
-   class Library {
-  borrowBook(bookId) {
-    if (this.balanceDue > MAX_BALANCE_ALLOWED) {
-      this.notifyMember("MEMBERSHIP_INACTIVE_BORROW");
-      return;
-    }
-  }
+```TypeScript
+class Library {
 
-  reserveBook(bookId) {
-    if (this.balanceDue > MAX_BALANCE_ALLOWED) {
-      this.notifyMember("MEMBERSHIP_INACTIVE_RESERVE");
-      return;
-    }
-  }
+    borrowBook(bookId) {
+       if (this.balanceDue > MAX_BALANCE_ALLOWED) {
+         this.notifyMember("MEMBERSHIP_INACTIVE_BORROW");
+         return;
+       }
+   }
 
-  LateFees(amount) {
-    this.balanceDue -= amount;
-    if (this.balanceDue > MAX_BALANCE_ALLOWED) {
-      this.notifyMember("MEMBERSHIP_INACTIVE_PAYMENT");
-    }
-  }
+   reserveBook(bookId) {
+      if (this.balanceDue > MAX_BALANCE_ALLOWED) {
+         this.notifyMember("MEMBERSHIP_INACTIVE_RESERVE");
+         return;
+       }
+   }
 
-  notifyMember(message) {
-    console.log(`Notification: ${message}`);
-  }
+   LateFees(amount) {
+      this.balanceDue -= amount;
+      if (this.balanceDue > MAX_BALANCE_ALLOWED) {
+        this.notifyMember("MEMBERSHIP_INACTIVE_PAYMENT");
+      }
+   }
+
+   notifyMember(message) {
+      console.log(`Notification: ${message}`);
+   }
 }
 
-const MAX_BALANCE_ALLOWED = 50;  
+const MAX_BALANCE_ALLOWED = 50;
 const library = new LibrarySystem();
 library.balanceDue = 60;
 
-library.borrowBook(123); 
-library.reserveBook(456); 
-library.payLateFees(20); 
+library.borrowBook(123);
+library.reserveBook(456);
+library.payLateFees(20);
 ```
+
 In the above example, everytime when we are borrowing a book , or returning a book we are having check to find whether the member is active or not. BalanceDue is checked in multiple places (within the methods borrowBook, reserveBook, and LateFees). Each time a member attempts to borrow or reserve a book, the system checks whether the balanceDue exceeds the MAX_BALANCE_ALLOWED limit. If so, it sends a notification to the member.
 
- If you need to change the behavior related to the balance check (e.g., change the limit or modify the way the notification is sent), you would need to modify it in all these methods (borrowBook, reserveBook, and LateFees). Here balance checking is duplicated across several methods, making the system more resist.
+If you need to change the behavior related to the balance check (e.g., change the limit or modify the way the notification is sent), you would need to modify it in all these methods (borrowBook, reserveBook, and LateFees). Here balance checking is duplicated across several methods, making the system more resist.
 
- 
- **Solution**
+**Solution**
 
+```TypeScript
+class Library {
 
- ```TypeScript
-   class Library {
   borrowBook(bookId) {
     if (this.isMembershipInactive()) {
       this.notifyMember("MEMBERSHIP_INACTIVE_BORROW");
@@ -1331,15 +1333,15 @@ In the above example, everytime when we are borrowing a book , or returning a bo
 
   reserveBook(bookId) {
     if (this.isMembershipInactive()) {
-      this.notifyMember("MEMBERSHIP_INACTIVE_RESERVE");
-      return;
+       this.notifyMember("MEMBERSHIP_INACTIVE_RESERVE");
+       return;
     }
   }
 
   payLateFees(amount) {
     this.balanceDue -= amount;
     if (this.isMembershipInactive()) {
-      this.notifyMember("MEMBERSHIP_INACTIVE_PAYMENT");
+     this.notifyMember("MEMBERSHIP_INACTIVE_PAYMENT");
     }
   }
 
@@ -1352,12 +1354,11 @@ In the above example, everytime when we are borrowing a book , or returning a bo
   }
 }
 
-const MAX_BALANCE_ALLOWED = 50;  inactive membership
+const MAX_BALANCE_ALLOWED = 50;
 const library = new LibrarySystem();
 library.balanceDue = 60;
 
-library.borrowBook(123); 
-library.reserveBook(456); 
-library.payLateFees(20); 
+library.borrowBook(123);
+library.reserveBook(456);
+library.payLateFees(20);
 ```
-

@@ -813,7 +813,7 @@ In simple way, feature envy code smell occurs when a funciton frequently interac
 When the same logic is duplicating multiple time which is not visible to us. Where duplication occurs internally
 ```Typescript
 Example:
-for(let index = 0 ; index<5;index++){
+for(let index = 0 ; index < 5; index++){
     console.log("Hello all!")
 }
 ```
@@ -829,11 +829,11 @@ console.log("Hello all!")
 So, to avoid such duplication we need to wrap that logic in some function and then we need to call that function.
 
 ```Typescript
-const printingHello(){
+const printHello(){
     console.log("Hello all!")
 }
 
-for(let i = 0 ; i<5;i++){
+for(let index = 0 ; index < 5 ;index++){
     printingHello()
 }
 ```

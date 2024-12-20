@@ -197,7 +197,7 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
 - When code is formatted properly, then developers can easily identify patterns and understand how the code works, which makes it easier to debug, maintain, and update the codebase over time. 
 
 - **Example**
-  - Code with out formatting
+  - Code without formatting
     ```TypeScript
     const add=(number1,number2)=>{
     const result=number1+number2;

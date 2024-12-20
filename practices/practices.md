@@ -193,7 +193,7 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
 
 - **God Line** refers to a single, very long and complex line of code that tries to do too much at once. These lines are difficult to read, understand, and debug because they combine multiple operations, making the logic unclear.
 - **Refactoring Technique: Split into Smaller Steps**
-  - Break the complex line into smaller, meaningful steps. Assign intermediate results to proper named variables. This improves readability and makes debugging easier since each step to its job independently.
+  - Break the complex line into smaller and meaningful steps. Assign intermediate results to proper named variables. This improves readability and makes debugging easier since each step do its job independently.
 
 - **Example**
     - Code with GOD line

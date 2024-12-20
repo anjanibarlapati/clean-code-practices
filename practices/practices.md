@@ -775,28 +775,27 @@ In simple way, feature envy code smell occurs when a funciton frequently interac
      Error: `Argument of type 'string' is not assignable to parameter of type 'number'`.
 
 - But Sometimes, a logic which may validate few aspects in run time may be converted to get checked in compile time. This can be done using `generics` in Type Script.
--Consider the below class example:
+- Consider the below class example:
 
     ```
-        class Container<T>{
-            value:T;
-            constructor(value:T){
-                this.value = value;
-            }
-            set(value:T){
-                this.value=value
-            }
+    class Container<T>{
+        value:T;
+        constructor(value:T){
+            this.value = value;
         }
+        set(value:T){
+            this.value=value
+        }
+    }
     ```
 
-    - If we look into the usage:
-        ```
-            const stringContainer = new Container<string>("Good");
-            stringContainer.set("Good Morning") //No compile time error as string is passed.
-            stringContainer.set(1) 
-        ```
-
-        Error: `Argument of type 'number' is not assignable to parameter of type 'string' `.
+- If we look into the usage:
+    ```
+    const stringContainer = new Container<string>("Good");
+    stringContainer.set("Good Morning") //No compile time error as string is passed.
+    stringContainer.set(1) 
+    ```
+    Error: `Argument of type 'number' is not assignable to parameter of type 'string' `.
     
 - This is how compile time safety works in TypeScript. 
 - It checked whether the string type is being passed or not. 

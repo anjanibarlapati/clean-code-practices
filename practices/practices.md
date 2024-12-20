@@ -214,44 +214,44 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
     Here we are repeating the code which calculates discount price. There is duplication.
     ``` TypeScript
     export function calculateTotal(cart: { price: number; discount: number }[]) {
-    let total = 0;
+        let total = 0;
 
-    const discountedPrice1 = cart[0].price - cart[0].price * cart[0].discount;
-    const tax1 = discountedPrice1 * 0.08; 
-    const shipping1 = 5.0; 
-    total += discountedPrice1 + tax1 + shipping1;
+        const discountedPrice1 = cart[0].price - cart[0].price * cart[0].discount;
+        const tax1 = discountedPrice1 * 0.08; 
+        const shipping1 = 5.0; 
+        total += discountedPrice1 + tax1 + shipping1;
 
-    const discountedPrice2 = cart[1].price - cart[1].price * cart[1].discount;
-    const tax2 = discountedPrice2 * 0.08; 
-    const shipping2 = 5.0; 
-    total += discountedPrice2 + tax2 + shipping2;
+        const discountedPrice2 = cart[1].price - cart[1].price * cart[1].discount;
+        const tax2 = discountedPrice2 * 0.08; 
+        const shipping2 = 5.0; 
+        total += discountedPrice2 + tax2 + shipping2;
 
-    const discountedPrice3 = cart[2].price - cart[2].price * cart[2].discount;
-    const tax3 = discountedPrice3 * 0.08; 
-    const shipping3 = 5.0;
-    total += discountedPrice3 + tax3 + shipping3;
+        const discountedPrice3 = cart[2].price - cart[2].price * cart[2].discount;
+        const tax3 = discountedPrice3 * 0.08; 
+        const shipping3 = 5.0;
+        total += discountedPrice3 + tax3 + shipping3;
 
-    return total;
+        return total;
     }
     ```
    So we are introducing abstraction, which makes the logic centralized at one place.
     ```TypeScript
-    import { IProduct } from "./types";
+    import { Product } from "./types";
 
-    function costOf(product: IProduct) {
-    const SHIPPING_PRICE = 5.0;
-    const TAX = 0.08;
+    function costOf(product: Product) {
+        const SHIPPING_PRICE = 5.0;
+        const TAX = 0.08;
 
-    const discountedPrice = product.price - product.price * product.discount;
-    const taxOnProduct = discountedPrice * TAX;
-    return discountedPrice + taxOnProduct + SHIPPING_PRICE;
+        const discountedPrice = product.price - product.price * product.discount;
+        const taxOnProduct = discountedPrice * TAX;
+        return discountedPrice + taxOnProduct + SHIPPING_PRICE;
     }
-    export function totalCost(cart: IProduct[]) {
-    let total = 0;
-    for (const product of cart) {
-        total += costOf(product);
-    }
-    return total;
+    export function totalCost(cart: Product[]) {
+        let total = 0;
+        for (const product of cart) {
+            total += costOf(product);
+        }
+        return total;
     }
     ```
   Now the duplication has been eliminated. This is how we refactored it.

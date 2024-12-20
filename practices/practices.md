@@ -1146,9 +1146,9 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
 
 1. ### Impure functions:
 
-   An impure function Can have side effects, such as modifying global variables or interacting with external systems.
+   An impure function can have side effects, such as modifying global variables or interacting with external systems.
 
-   An impure May rely on external state, causing unpredictable behavior.
+   An impure may rely on external state, causing unpredictable behavior.
 
     ``` JavaScript
    let oldValue = 7; 
@@ -1160,50 +1160,25 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
   
    console.log(add(5));
     ```
-    **Refactoring an Impure Function to Pure:**
 
-    Impure version
-
-    ``` JavaScript
-        let oldValue = 7;
-
-        function add(newValue) {
-            oldValue += newValue; 
-            return oldValue; 
-        }
-
-        console.log(add(5));  
-    ```
-     **Code Smell Example:**
-
-     *Bad Example (impure function with side effects):*
+    **Bad Example (impure function with side effects):**
 
     ```JavaScript
-     function removeFirstItem(array) {
-       array.shift(); 
+     function removeFirstItem(arr) {
+       arr.shift(); 
     }
     ```
 
-    *Better Example (refactored to pure):*
+    **Better Example (refactored to pure):**
     ```JavaScript
        function removeFirstItem(array) {
          return array.slice(1);  
         }
 
-    let nums = [1, 2, 3];
-    console.log(removeFirstItem(nums));  // Output: [2, 3]
-    console.log(nums);  // Output: [1, 2, 3] 
-
+      let nums = [1, 2, 3];
+        console.log(removeFirstItem(nums));
+        console.log(nums);  
     ```
-
-    **Adavantages of Impure Functions:**
-
-    1. Side Effects: Impure functions are useful for tasks that require side effects, such as interacting with the DOM, logging data, or updating global state.
-
-    2. Easier to Write: Impure functions are often simpler to implement when the task involves modifying external state or interacting with outside systems (like file I/O).
-
-    3. Fewer Input Parameters: Impure functions often don't need to pass all data as parameters, simplifying the code for certain tasks.
-
     **Disadvantages:**
 
     1. Harder to Test: Since impure functions depend on external state or produce side effects, it's more difficult to isolate and test them.
@@ -1224,7 +1199,6 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
 
    **Example of a pure Function:**
 
-   Impure version (modifies external state):
    ``` JavaScript
    function add(a, b) {
         return a + b;
@@ -1241,7 +1215,7 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
         return total;
     }
 
-    console.log(add(5));  // Output: 5
+    console.log(add(5)); 
     ```
     **Refactored to a Pure Functions:**
 
@@ -1251,12 +1225,10 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
     }
 
     let currentTotal = 0;
-    console.log(add(5, currentTotal));  // Output: 5
+    console.log(add(5, currentTotal)); 
     ```
     
-    **Code Smell Example:**
-    
-    Bad Example (impure function):
+    **Bad Example (impure function):**
 
     ``` JavaScript
     let counter = 0;
@@ -1266,26 +1238,19 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
         return counter;
     }
     ```
-    Good Example (refactored to a pure function):
+    **Good Example (refactored to a pure function)**
+
     ``` JavaScript
     function increment(counter) {
         return counter + 1; 
     }
-
     let currentCounter = 0;
-    console.log(increment(currentCounter));  // Output: 1
+    console.log(increment(currentCounter));  
     ```
+    **Adavantages:**
 
-   **Adavantages:**
+    1. Easier to Test: Since the output is predictable and based only on inputs, pure functions are easier to test.
 
-   1. Easier to Test: Since the output is predictable and based only on inputs, pure functions are easier to test.
+    2. Predictability: The same input always produces the same output, so there are no surprises.
 
-   2. Predictability: The same input always produces the same output, so there are no surprises.
-
-   3. Composability: Pure functions can be composed together to build more complex behaviors without side effects.
-
-   **Disadvantages:**
-
-   1. State Changes: For certain tasks (like UI updates or interacting with databases), you may need to handle side effects, which pure functions can't do directly.
-
-   2. Data Overhead: Pure functions often require passing all necessary data as arguments, which can be cumbersome for large applications.
+    3. Composability: Pure functions can be composed together to build more complex behaviors without side effects.

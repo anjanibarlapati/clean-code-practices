@@ -555,16 +555,17 @@ In simple way, feature envy code smell occurs when a funciton frequently interac
     Example:
     -  Duplicated code for calculating the tax in multiple places:
     ```sh
+    const TAX_RATE = 0.05;
+
     function calculateTotalPrice(price: number): number {
-    const tax = price * 0.05;
-    return price + tax;
+        const tax = price * TAX_RATE;
+        return price + tax;
     }
 
     function calculateDiscountedPrice(price: number, discount: number): number {
-    const tax = price * 0.05;
-    return price - discount + tax;
+        const tax = price * TAX_RATE;
+        return price - discount + tax;
     }
-
     ```
 
     - Instead of duplicating the tax calculation logic, we can refactor it into a helper function.
@@ -572,74 +573,74 @@ In simple way, feature envy code smell occurs when a funciton frequently interac
     **Refactored code:**
 
     ```sh
-    
-    // Helper function to calculate tax
+    const TAX_RATE = 0.05;
 
-    function calculateTax(price: number, taxRate: number = 0.05): number {
-    return price * taxRate;
+    function calculateTax(price: number, taxRate: number = TAX_RATE): number {
+        return price * taxRate;
     }
 
     function calculateTotalPrice(price: number): number {
-    const tax = calculateTax(price);
-    return price + tax;
+        const tax = calculateTax(price);
+        return price + tax;
     }
 
     function calculateDiscountedPrice(price: number, discount: number): number {
-    const tax = calculateTax(price);
-    return price - discount + tax;
+        const tax = calculateTax(price);
+        return price - discount + tax;
     }
-
     ```
-   2. **Long Methods:** Large, complex methods can be hard to read, test, and maintain. 
-        If a function or method does too many things, it might be time to break it down into smaller, more focused methods.
+   2. **Lengthy Methods:** Large, complex methods can be hard to read, test, and maintain. 
+        If a function or method does too many things, it might be time to break it down into smaller methods.
 
     Example:
     ```sh
+    const ERROR_MESSAGES = {
+        INVALID_ORDER: "The order is invalid.",
+        INSUFFICIENT_STOCK: "Not enough stock to fulfill the order.",
+    };
+
     function processOrder(order: Order): void {
-    // Validate the order
-    if (!order.isValid()) {
-        throw new Error("Invalid order");
-    }
-
-    // Check inventory
-    if (!checkInventory(order)) {
-        throw new Error("Insufficient stock");
-    }
-
-    // Charge the customer
-    chargeCustomer(order);
-
-    // Ship the order
-    shipOrder(order);
-
-    // Send confirmation
-    sendConfirmation(order);
+        if (!order.isValid()) {
+            throw new Error(ERROR_MESSAGES.INVALID_ORDER);
+        }
+        if (!checkInventory(order)) {
+            throw new Error(ERROR_MESSAGES.INSUFFICIENT_STOCK);
+        }
+        chargeCustomer(order);
+        shipOrder(order);
+        sendConfirmation(order);
     }
     ```
   - **Problem (Code Smell):** The ```process_order()``` method is doing too many things — `validating`, `checking inventory`, `charging`, `shipping`, etc.
 
-   - **Solution (Boy Scout Rule):** Breaking the responsibilities into smaller, focused methods. This makes the code easier to test, understand, and modify.
+   - **Solution (Boy Scout Rule):** Breaking the responsibilities into smaller methods. This makes the code easier to test, understand, and modify.
    
    **Refactored code:**
    ```sh
-   function processOrder(order: Order): void {
-    validateOrder(order);
-    checkInventory(order);
-    chargeCustomer(order);
-    shipOrder(order);
-    sendConfirmation(order);
+
+    const ERROR_MESSAGES = {
+        INVALID_ORDER: "The order is invalid.",
+        INSUFFICIENT_STOCK: "Not enough stock to fulfill the order.",
+    };
+
+    function processOrder(order: Order): void {
+        validateOrder(order);
+        checkInventory(order);
+        chargeCustomer(order);
+        shipOrder(order);
+        sendConfirmation(order);
     }
 
     function validateOrder(order: Order): void {
-    if (!order.isValid()) {
-        throw new Error("Invalid order");
-    }
+        if (!order.isValid()) {
+            throw new Error(ERROR_MESSAGES.INVALID_ORDER);
+        }
     }
 
     function checkInventory(order: Order): void {
-    if (!checkInventory(order)) {
-        throw new Error("Insufficient stock");
-    }
+        if (!checkInventory(order)) {
+            throw new Error(ERROR_MESSAGES.INSUFFICIENT_STOCK);
+        }
     }
     ```
     3. **Long Parameter Lists:**
@@ -658,19 +659,19 @@ In simple way, feature envy code smell occurs when a funciton frequently interac
     **Refactored code:**
     ```sh
     class User {
-    constructor(
-        public username: string,
-        public email: string,
-        public password: string,
-        public phone: string,
-        public address: string,
-        public city: string,
-        public country: string
-    ) {}
+        constructor(
+            public username: string,
+            public email: string,
+            public password: string,
+            public phone: string,
+            public address: string,
+            public city: string,
+            public country: string
+        ) {}
     }
 
     function createUser(user: User): void {
-    // we can use the user object to access the properties
+
     }
     ```
 
@@ -681,13 +682,13 @@ In simple way, feature envy code smell occurs when a funciton frequently interac
     Example:
     ```sh
     function connectToDatabase(): void {
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "admin",
-        password: "admin123",
-        database: "app_db"
-    });
-    connection.connect();
+        const connection = mysql.createConnection({
+            host: "localhost",
+            user: "admin",
+            password: "admin123",
+            database: "app_db"
+        });
+        connection.connect();
     }
     ```
 
@@ -703,13 +704,13 @@ In simple way, feature envy code smell occurs when a funciton frequently interac
     dotenv.config();
 
     function connectToDatabase(): void {
-    const connection = mysql.createConnection({
-        host: process.env.DB_HOST || 'localhost',
-        user: process.env.DB_USER || 'admin',
-        password: process.env.DB_PASSWORD || '',
-        database: process.env.DB_DATABASE || 'app_db'
-    });
-    connection.connect();
+        const connection = mysql.createConnection({
+            host: process.env.DB_HOST || 'localhost',
+            user: process.env.DB_USER || 'admin',
+            password: process.env.DB_PASSWORD || '',
+            database: process.env.DB_DATABASE || 'app_db'
+        });
+        connection.connect();
     }
     ```
 
@@ -720,20 +721,21 @@ In simple way, feature envy code smell occurs when a funciton frequently interac
 
     Example:
     ```sh
+    const TAX_RATE = 0.05;
     // This function calculates the total price with tax added
     function calculateTotal(price: number): number {
 
     // First, calculate the tax
 
-    const tax = price * 0.05;
+        const tax = price * TAX_RATE;
 
     // Now, add tax to the original price
 
-    const total = price + tax;
+        const total = price + tax;
 
     // Return the final total price
 
-    return total;
+        return total;
     }
     ```
 
@@ -744,10 +746,13 @@ In simple way, feature envy code smell occurs when a funciton frequently interac
     **Refactored code:**
 
     ```sh
+    const TAX_RATE = 0.05;
+
     function calculateTotal(price: number): number {
-    const tax = price * 0.05;
-    return price + tax;
+        const tax = price * TAX_RATE;
+        return price + tax;
     }
+
     ```
 
 

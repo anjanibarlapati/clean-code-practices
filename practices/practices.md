@@ -1075,65 +1075,70 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
    - We can add new product types and discount strategies without modifying the existing ShoppingCart class. We simply create a new discount strategy class and update the DiscountStrategyFactory.
    - If we need to add a new product type (like FOOD), we just create a new strategy and update the factory without touching the ShoppingCart class.
    - If the discount rules change for a particular product type, we only need to modify the respective strategy class, not the core logic of the shopping cart.
-   
-# DRY principle(Don't repeat yourself)
-### Dry principle is a concept in software development, which aims to reduce the repitition by introducing an abstraction. It avoids redundancy in our code.
-## Why repetetion is a code smell ?
-1. When you repeat code, any changes to that logic or functionality need to be made in multiple places.
-2. When the same logic or code appears in multiple places, it becomes harder to ensure consistency. When bug is one place, you need to modify in multiple places.
-3. Repetition increases the size of the codebase without adding new functionality.
-4. Having repeated code makes the program harder to read because developers are likely to see the same thing multiple times in different parts of the system.
-5. It creates redundancy. There is a more difficulty in finding errors.
-6. There's always a risk that changes or fixes made in one instance of the code may not be propagated to all others, leading to inconsistencies and bugs. 
 
-#### What is the value of refactoring it?
-1. Main aim is to avoid the **duplication** of code(re-implementing the same logic in multiple places), by providing reusability.
-2. When the DRY principle is applied successfully, a modification of any single element of a system does not require a change multiple places, we can implement the changes in all the related places/logics at once.  Centralized logic makes **maintenance** easier. When you need to change a piece of functionality, you only need to update it in one place instead of multiple locations.
-3. It helps in **isolating logic** into functions or methods, making the code easier to test.
-4. Debugging is more efficient because any error that arises due to the repeated code will only need to be fixed in one place.
-5. By abstracting logic, we ensure that the same logic is applied uniformly across the entire codebase.
 
-#### How we can refactor code by applying DRY principle?
-1. We will centralize the logic by making it into reusable functions, methods, or components.
-2. We have to split functions, and reuse it whenever necessary.
+##  DRY principle(Don't repeat yourself)
+- Dry principle is a concept in software development, which aims to reduce the repitition by introducing an abstraction. It avoids redundancy in our code.
 
-**Example**
+- #### Why repetition is a code smell ?
+    - When you repeat code, any changes to that logic or functionality need to be made in multiple places.
+    - It becomes harder to ensure consistency.
+    - Repetition increases the size of the codebase without adding new functionality.
+    - Repeated code makes the program harder to read.
+    - There is a more difficulty in finding errors.
+    - There's always a risk that changes or fixes made in one instance of the code may not be propagated to all others, leading to inconsistencies and bugs. 
 
-Here we are repeating the code which calculates discount price. There is duplication.
-```bash
-export function calculateTotal(cart: { price: number; discount: number }[]) {
-  let total = 0;
+- #### What is the value of refactoring it?
+    - Main aim is to avoid the **duplication** of code(re-implementing the same logic in multiple places), by providing reusability.
+    - We can implement the changes in all the related places/logics at once.
+    - We can centralize the logic by making it into reusable functions, methods, or components, centralized logic makes **maintenance** easier. When you need to change a piece of functionality, you only need to update it in one place instead of multiple locations.
+    - It helps in **isolating logic** into functions or methods, making the code easier to test.
+    - Debugging is more **efficient** because any error that arises due to the repeated code will only need to be fixed in one place.
+    - By abstracting logic, we ensure that the same **logic is applied uniformly** across the entire codebase.
 
-  const discountedPrice1 = cart[0].price - cart[0].price * cart[0].discount;
-  const tax1 = discountedPrice1 * 0.08; 
-  const shipping1 = 5.0; 
-  total += discountedPrice1 + tax1 + shipping1;
+    **Example**
+  
+    Here we are repeating the code which calculates discount price. There is duplication.
+    ``` TypeScript
+    export function calculateTotal(cart: { price: number; discount: number }[]) {
+    let total = 0;
 
-  const discountedPrice2 = cart[1].price - cart[1].price * cart[1].discount;
-  const tax2 = discountedPrice2 * 0.08; 
-  const shipping2 = 5.0; 
-  total += discountedPrice2 + tax2 + shipping2;
+    const discountedPrice1 = cart[0].price - cart[0].price * cart[0].discount;
+    const tax1 = discountedPrice1 * 0.08; 
+    const shipping1 = 5.0; 
+    total += discountedPrice1 + tax1 + shipping1;
 
-  const discountedPrice3 = cart[2].price - cart[2].price * cart[2].discount;
-  const tax3 = discountedPrice3 * 0.08; 
-  const shipping3 = 5.0;
-  total += discountedPrice3 + tax3 + shipping3;
+    const discountedPrice2 = cart[1].price - cart[1].price * cart[1].discount;
+    const tax2 = discountedPrice2 * 0.08; 
+    const shipping2 = 5.0; 
+    total += discountedPrice2 + tax2 + shipping2;
 
-  return total;
-}
-```
-So we are introducing abstraction, which makes the logic centralized at one place.
-```bash
-export function calculateTotal(cart: { price: number; discount: number }[]) {
-  let total = 0;
-  for (const cartItem of cart) {
-    const shippingCost = 5.0;
-    const taxPercentageOnProduct = 0.08;
-    const discountedPrice = cartItem.price - cartItem.price * cartItem.discount;
-    const tax = discountedPrice * taxPercentageOnProduct;
-    total +=discountedPrice + tax + shippingCost;
-  }
-  return total;
-}
-```
-- Now the duplication has been eliminated. This is how we refactored it.
+    const discountedPrice3 = cart[2].price - cart[2].price * cart[2].discount;
+    const tax3 = discountedPrice3 * 0.08; 
+    const shipping3 = 5.0;
+    total += discountedPrice3 + tax3 + shipping3;
+
+    return total;
+    }
+    ```
+   So we are introducing abstraction, which makes the logic centralized at one place.
+    ```TypeScript
+    import { IProduct } from "./types";
+
+    function costOf(product: IProduct) {
+    const SHIPPING_PRICE = 5.0;
+    const TAX = 0.08;
+
+    const discountedPrice = product.price - product.price * product.discount;
+    const taxOnProduct = discountedPrice * TAX;
+    return discountedPrice + taxOnProduct + SHIPPING_PRICE;
+    }
+    export function totalCost(cart: IProduct[]) {
+    let total = 0;
+    for (const product of cart) {
+        total += costOf(product);
+    }
+    return total;
+    }
+    ```
+  Now the duplication has been eliminated. This is how we refactored it.

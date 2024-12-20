@@ -138,7 +138,6 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
     Refactor your code to make it clear, and only add comments when absolutely necessary (e.g., to explain why something is done, not how).
 
     **Bad example**
-
     ```TypeScript
     // apply 2% discount for total cost cost is more than 1000
     if(totalCoast > 1000){
@@ -1142,3 +1141,151 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
     }
     ```
   Now the duplication has been eliminated. This is how we refactored it.
+
+## Impure and Pure functions.
+
+1. ### Impure functions:
+
+   An impure function Can have side effects, such as modifying global variables or interacting with external systems.
+
+   An impure May rely on external state, causing unpredictable behavior.
+
+    ``` JavaScript
+   let oldValue = 7; 
+  
+    function add(newValue) { 
+        oldValue += newValue;
+      return oldValue; 
+    } 
+  
+   console.log(add(5));
+    ```
+    **Refactoring an Impure Function to Pure:**
+
+    Impure version
+
+    ``` JavaScript
+        let oldValue = 7;
+
+        function add(newValue) {
+            oldValue += newValue; 
+            return oldValue; 
+        }
+
+        console.log(add(5));  
+    ```
+     **Code Smell Example:**
+
+     *Bad Example (impure function with side effects):*
+
+    ```JavaScript
+     function removeFirstItem(array) {
+       array.shift(); 
+    }
+    ```
+
+    *Better Example (refactored to pure):*
+    ```JavaScript
+       function removeFirstItem(array) {
+         return array.slice(1);  
+        }
+
+    let nums = [1, 2, 3];
+    console.log(removeFirstItem(nums));  // Output: [2, 3]
+    console.log(nums);  // Output: [1, 2, 3] 
+
+    ```
+
+    **Adavantages of Impure Functions:**
+
+    1. Side Effects: Impure functions are useful for tasks that require side effects, such as interacting with the DOM, logging data, or updating global state.
+
+    2. Easier to Write: Impure functions are often simpler to implement when the task involves modifying external state or interacting with outside systems (like file I/O).
+
+    3. Fewer Input Parameters: Impure functions often don't need to pass all data as parameters, simplifying the code for certain tasks.
+
+    **Disadvantages:**
+
+    1. Harder to Test: Since impure functions depend on external state or produce side effects, it's more difficult to isolate and test them.
+
+    2. Unpredictable Behavior: Impure functions may behave differently depending on the state of the program or external factors, making them harder to reason about.
+
+    3. Hidden Dependencies: Impure functions may rely on external state, which can introduce bugs and make the code harder to maintain.
+
+2. ### Pure functions:
+
+   A pure function is a function that Always returns the same output for the same input.
+
+   A pure function is a function that Does not modify any external state or rely on it.
+
+   A pure function is a function that Given the same inputs, a pure function will always return the same output.
+
+   A pure function is a function that Has no side effects, meaning it does not change anything outside of the function (like global variables or external systems).
+
+   **Example of a pure Function:**
+
+   Impure version (modifies external state):
+   ``` JavaScript
+   function add(a, b) {
+        return a + b;
+    }
+    console.log(add(2, 3));
+   ```
+   **Refactoring an impure function:**
+    ``` JavaScript
+    
+    let total = 0;
+
+    function add(newValue) {
+    total += newValue; 
+        return total;
+    }
+
+    console.log(add(5));  // Output: 5
+    ```
+    **Refactored to a Pure Functions:**
+
+    ``` JavaScript
+   function add(newValue, total) {
+        return total + newValue;  
+    }
+
+    let currentTotal = 0;
+    console.log(add(5, currentTotal));  // Output: 5
+    ```
+    
+    **Code Smell Example:**
+    
+    Bad Example (impure function):
+
+    ``` JavaScript
+    let counter = 0;
+
+    function increment() {
+    counter += 1;  
+        return counter;
+    }
+    ```
+    Good Example (refactored to a pure function):
+    ``` JavaScript
+    function increment(counter) {
+        return counter + 1; 
+    }
+
+    let currentCounter = 0;
+    console.log(increment(currentCounter));  // Output: 1
+    ```
+
+   **Adavantages:**
+
+   1. Easier to Test: Since the output is predictable and based only on inputs, pure functions are easier to test.
+
+   2. Predictability: The same input always produces the same output, so there are no surprises.
+
+   3. Composability: Pure functions can be composed together to build more complex behaviors without side effects.
+
+   **Disadvantages:**
+
+   1. State Changes: For certain tasks (like UI updates or interacting with databases), you may need to handle side effects, which pure functions can't do directly.
+
+   2. Data Overhead: Pure functions often require passing all necessary data as arguments, which can be cumbersome for large applications.

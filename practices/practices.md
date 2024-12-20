@@ -1264,7 +1264,7 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
 
   3.  Composability: Pure functions can be composed together to build more complex behaviors without side effects.
 
-## Shot gun surgery
+## Shotgun surgery
 
 The shotgun surgery code smell is one of the code smells that often overlaps with other code smells, particularly duplicate code. Shotgun Surgery resembles Divergent Change. Divergent Change is when many changes are made to a single class. Shotgun Surgery refers to when a single change is made to multiple classes simultaneously.
 

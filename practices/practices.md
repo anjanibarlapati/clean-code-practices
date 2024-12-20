@@ -249,16 +249,6 @@ We’ll cover naming functions and variables, magic numbers and strings, excessi
     }
     ```
     
-## Code smell in functions
-## 1. Incorrect function name: 
-The code smell: 
-- 
- Wrong function name does not conveys the original action of the function. It will create misconception to the one who is looking at it. 
-Refactoring Techniques: 
--  
-- Initially check the function name, the name of the function is conveying what job or action it is doing. The name of the function should related to the action the function is doing. 
-- The function should be in the present tense not in the past tense. 
-[For more information refer this ](#1-incorrect-function-name) 
 # Code smell in functions
 
   1. ### Incorrect function name:

@@ -886,7 +886,7 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
  
     - Code with nested conditions 
         ```TypeScript
-        function handleLogin(username: string | null, password: string | null, user: IUser | null): string {
+        function handleLogin(username: string | null, password: string | null, user: User | null): string {
             if (username !== null && password !== null) {
                 if (user !== null) {
                     if (user.isActive) {
@@ -908,7 +908,7 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
         ```
     - Refactored code using early returns
         ```TypeScript
-        function handleLogin(username: string | null, password: string | null, user: IUser | null): string {
+        function handleLogin(username: string | null, password: string | null, user: User | null): string {
             if (!username || !password) {
                 return "Username or password cannot be null.";
             }

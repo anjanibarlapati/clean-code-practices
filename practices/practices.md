@@ -940,14 +940,15 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
   2. ### Example
 
      In this example, we have a Product class, and we want to calculate the discount for different types of products (e.g., Electronics, Clothing).
+    
+  ``` Typescript
+  enum ProductType {
+    ELECTRONICS,
+    CLOTHING,
+    FOOD,
+  }
 
-    ```
-    enum ProductType {
-      ELECTRONICS,
-      CLOTHING,
-    }
-
-    class Product {
+  class Product {
       constructor(
         public name: string,
         public type: ProductType,
@@ -955,7 +956,7 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
       ) {}
     }
 
-    class ShoppingCart {
+  class ShoppingCart {
       private products: Product[] = [];
 
       addProduct(product: Product) {
@@ -979,7 +980,7 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
       }
     }
 
-    ```
+```
 
   3. ### Problems with this code
 
@@ -992,7 +993,7 @@ Automated tests can help highlight repeated patterns and ensure changes in one p
 
   4. ### Extensible code for this Example
 
-  ```
+  ``` Typescript
   enum ProductType {
     ELECTRONICS,
     CLOTHING,
